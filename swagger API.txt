@@ -1,0 +1,571 @@
+
+import swaggerAutogen from 'swagger-autogen';
+
+const doc = {
+  info: {
+    title: 'My API',
+    description: 'Description'
+  },
+  host: 'localhost:3000'
+};
+
+const outputFile = './swagger-output.json';
+const routes = ['./path/userRoutes.js', './path/bookRoutes.js'];
+
+/* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
+root file where the route starts, such as index.js, app.js, routes.js, etc ... */
+
+swaggerAutogen()(outputFile, routes, doc);
+
+
+ npm install @fastify/swagger @fastify/swagger-ui
+
+npm install --save-dev swagger-autogen
+
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+
+
+
+The code above sets up:
+
+Swagger documentation with basic API information
+Swagger UI accessible at /documentation
+An example route with schema documentation
+
+
+To document your routes, add a schema object to each route definition that includes:
+
+tags: categorize your endpoints
+description: explain what the endpoint does
+response: define the response structure
+request: define the request body/params (if needed)
+
+
+To access your documentation:
+
+Start your server
+Visit http://localhost:3000/documentation
+You'll see the Swagger UI with all your documented endpoints
+
+
+
+Would you like me to show you how to document more complex route scenarios, like POST requests with request bodies or routes with path parameters?
+[]]]]]]]]]]]]]]]]]]]]]]]]]][]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]:
+
+
+const fastify = require('fastify')();
+const swagger = require('@fastify/swagger');
+const swaggerUi = require('@fastify/swagger-ui');
+
+// Register the swagger plugin
+fastify.register(swagger, {
+  openapi: {
+    info: {
+      title: 'My API',
+      description: 'My REST API documentation',
+      version: '1.0.0'
+    }
+  }
+});
+
+// Register the Swagger UI plugin
+fastify.register(swaggerUi, {
+  routePrefix: '/documentation', // URL path to access the UI
+  uiConfig: {
+    docExpansion: 'full', // Expand the documentation
+    deepLinking: false
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+});
+
+// Define your routes
+fastify.get('/some-route', {
+  schema: {
+    description: 'Get something',
+    response: {
+      200: {
+        description: 'Successful response',
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      }
+    }
+  }
+}, async (request, reply) => {
+  return { message: 'Hello, world!' };
+});
+
+// Start your Fastify server
+fastify.listen(3000, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server listening at ${address}`);
+});
+
+
+[]]]]]]]]]
+
+i have just used this command :
+
+my server is running on the port number:3044
+
+ npm install @fastify/swagger @fastify/swagger-ui
+npm install --save-dev swagger-autogen
+and i created a swagger.js file ,
+
+import FastifySwagger from '@fastify/swagger';
+import FastifySwaggerUI from '@fastify/swagger-ui';
+import swaggerAutogen from 'swagger-autogen';
+
+// Step 1: Generate swagger_output.json using swagger-autogen
+const doc = {
+  info: {
+    title: 'Fastify API',
+    description: 'Generated API documentation using swagger-autogen',
+    version: '1.0.0',
+  },
+  host: 'localhost:3045', // Change it if deploying elsewhere
+  basePath: '/',
+  schemes: ['http'],
+};
+
+const outputFile = './swagger_output.json';
+const endpointsFiles = ['./routes/authroutes.js', './routes/eventroutes.js']; // Add all your route files
+
+
+
+
+wheather i need to install any other dependencies  or and i need the complete code and what to do next:
+
+and my package.json file is:
+{
+  "name": "fastify-role",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage",
+    "generate-docs": "node swagger.js"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/swagger": "^9.4.2",
+    "@fastify/swagger-ui": "^5.2.2",
+    "@sentry/node": "^9.1.0",
+    "@sentry/profiling-node": "^9.1.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "fastify": "^3.29.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.9"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.7",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "swagger-autogen": "^2.23.7"
+  }
+}
+
+    
+
+==============
+
+i want the swagger doumentation for my all routes what i need to do:
+what i need to do know next:
+
+i need to set upo the swagger:
+here
+my app.js file is :
+
+
+
+// importing the Sentry module from the instrument.mjs file
+import  './instrument.js';
+
+import * as Sentry from "@sentry/node";
+import fastify from 'fastify';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import eventRou from './routes/eventroutes.js';
+import authRou from './routes/authroutes.js';
+
+
+
+dotenv.config();
+
+const app = fastify({
+    logger: true
+});
+
+Sentry.setupFastifyErrorHandler(app);
+
+//console.log(Sentry);
+console.log("the server started successfully");
+mongoose.connect(process.env.MONGO_URL)
+    .then(() => {
+
+        app.log.info('Database connected successfully');
+        
+    })
+    .catch((err) => {
+        app.log.error('MongoDB not connected successfully', err);
+        Sentry.captureException(err);
+        
+       
+    });
+
+app.register(eventRou, { prefix: '/event' });
+app.register(authRou, { prefix: '/auth' });
+
+app.setErrorHandler((error, request, reply) => {
+    Sentry.captureException(error);
+    app.log.error('Error:', error);
+   
+    reply.status(500).send({ error: error.message });
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, (err, address) => {
+    if (err) {
+        app.log.error(err);
+        process.exit(1);
+    }
+    app.log.info(`Server listening on ${address}`);
+});
+
+console.log(`the server listening on port ${PORT}`);
+
+export default app;
+
+===========>
+and my controllers/authopera.js  is file is :
+
+import  '../instrument.js';
+
+import * as Sentry from "@sentry/node";
+
+import app from '../app.js';
+import fastify from 'fastify';
+import bcrypt from 'bcrypt';
+import User from '../models/Users.js';
+import Logs from '../models/Logs.js';
+import jwt from 'jsonwebtoken';
+import joi from 'joi';
+
+
+// const app = fastify({
+//     logger: true
+// })
+
+//Sentry.setupFastifyErrorHandler(app);
+
+
+console.log("Starting authopera.js...");
+
+
+
+// THE REGISTRATION CONTROLLER LOGIC 
+export const register = async (request, reply) => {
+    const { username, password, email, role } = request.body;
+   
+
+
+    try {
+
+        const existingUser = await Ur.findOne({ username });
+        console.log("Checking for existing user:", username, "Found:", existingUser);
+        //DONE
+        if (existingUser) {
+         
+            return reply.status(400).send({ error: 'Username already exists. Try with another username' });
+        }
+
+        const user = new User({ username, email, password, role });
+
+        await user.save();
+        //  reply.status(201).send({user})
+        console.log("Sending success response: user created");
+        //DONE
+        reply.status(201).send({ message: 'user created successfully' });
+        // reply.status(201).send({user})
+    }
+    catch (err) {
+        //  console.error('Error creating the user',err);
+      //  console.error("Error during user registration:", err);
+      Sentry.captureException(err);
+    
+        return reply.status(500).send({ error: 'error creating the user' });
+        
+    }
+}
+
+// THE LOGIN CONTROLLER LOGIC 
+export const login = async (request, reply) => {
+
+
+    const { username, password } = request.body;
+    // console.log("Login attempt:", { username });  // Debugging login request
+
+
+    try {
+        const user = await User.findOne({ username });
+        console.log("User found for login:", user ? user._id : "No user found");
+        //DONE
+        if (!user) {
+            return reply.status(400).send({ error: 'user not found' });
+        }
+
+        const ismatch = await bcrypt.compare(password, user.password);
+        //DONE
+        if (!ismatch) return reply.status(400).send({ error: 'invalid credentials' });
+
+        const payload = { id: user._id, role: user.role };
+        const token = jwt.sign(payload, process.env.SEC);
+
+        //  reply.status(200).send({token});
+        console.log(token);
+        const data = await User.findOne({ username });
+        //console.log(data, "hey iam doing good hey iam doing good here ")
+        // Userid=data._id;
+
+        const existingLog = await Logs.findOne({ UserId: user._id })
+
+        console.log(existingLog, "exisiting loger details here");
+        //DONE
+        if (existingLog) {
+            console.log("Existing log found, updating log:", existingLog);
+            existingLog.UserId = user._id,
+
+                existingLog.logintime = Date.now(),
+
+                existingLog.logouttime = null,
+
+                existingLog.UserToken = token
+
+            await existingLog.save();
+            console.log("Existing log updated:", existingLog);
+           // console.log("Existing log updated:", existingLog);
+        }
+        else {
+            console.log("No existing log found, creating new log.");
+            const user1 = new Logs({
+                //Userid:user._id,
+                UserId: user._id,
+
+                logintime: Date.now(),
+
+                logouttime: null,
+
+                UserToken: token
+            });
+
+            await user1.save();
+            console.log(user1, "document,done");
+
+        }
+
+
+
+
+        console.log("Sending login response with token:", token);
+// DONE
+        reply.status(200).send({ token });
+
+    }
+    catch (err) {
+        // Log the actual error message for debugging
+
+        Sentry.captureException(err);
+       
+        reply.status(500).send({ error: 'Error while logging in the user'});
+    }
+
+};
+
+
+
+
+
+// THE LOGOUT CONTROLLER LOGIC 
+export const logout = async (request, reply) => {
+
+    try {
+
+
+        const authHeader = request.headers['authorization'];
+        console.log("Logout attempt, received token:", authHeader);
+        const token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) {                        
+            return reply.status(401).send({ error: 'token required for the logging' })
+        };
+
+
+        const decoded = jwt.verify(token, process.env.SEC);
+        const userId = decoded.id;
+        console.log(userId);
+
+        const userlogs = await Logs.findOne({ UserId: userId });
+
+        console.log("User logs for logout:", userlogs);
+
+        if (!userlogs) {
+            return reply.status(400).send({ message: 'No active session found for this token' });
+        }
+
+
+        console.log(userlogs, "user logs");
+        userlogs.logouttime = Date.now();
+        userlogs.UserToken = null;
+
+        await userlogs.save();
+        console.log("Logging out user, sending response.");
+        reply.send({ message: 'user logged out successfully' });
+    }
+
+    catch (err) {
+        //console.log('Error durign the logout', err);
+
+        Sentry.captureException(err);
+        reply.status(400).send({ error: 'error while logout of the current-user' });
+    }
+
+}
+==============>
+routes
+authroutes.js and my code is side thsi file is :
+
+
+
+import fastify from 'fastify';
+import joi from 'joi';
+
+const app = fastify({
+    logger: true
+});
+
+import { register, login } from '../controllers/authopera.js';
+import auth from '../middleware/authmiddle.js';
+import registerUserSchema from '../schemas/registerUserSchema.js';
+import loginUserSchema from '../schemas/loginUserSchema.js';
+
+import { logout } from '../controllers/authopera.js';
+
+import userRegisterValidation from '../validators/registration.js';
+
+import userLoginvalidation from '../validators/login.js';
+
+import userLogoutValidation from '../validators/logout.js';
+
+async function authroutes(fastify, options) {
+
+
+
+
+    fastify.post('/register', {
+        schema: registerUserSchema, preHandler:
+            async (request, reply) => {
+
+
+                const { error: missingFieldsError } = userRegisterValidation.requiredFieldsValidation(request.body);
+                if (missingFieldsError) {
+                    return reply.status(400).send({
+                        error: 'Bad Request',
+                        message: 'Missing required fields in the body'
+                    });
+                }
+                const { error: validationError } = userRegisterValidation.validate(request.body);
+                if (validationError) {
+                    return reply.status(400).send({
+                        error: 'Bad Request',
+                        message: 'Validation failed body requirement not matching'
+                    });
+                }
+            }
+    }, register); // register route
+
+    fastify.post('/login', {
+         preHandler: async (request, reply) => {
+            const { error: missingFieldsError } = userLoginvalidation.requiredFieldsValidation(request.body);
+            if (missingFieldsError) {
+                return reply.status(400).send({
+                    error: 'Bad Request',
+                    message: 'Missing required fields in the body'
+                });
+            }
+
+
+            const { error:validationError} = userLoginvalidation.validate(request.body);
+            if (validationError) {
+                return reply.status(400).send({
+                    error: 'Bad Request',
+                    message: 'Validation failed body requirement not matching',
+                })
+            }
+
+
+        }
+    }, login); // login route
+
+
+
+    // fastify.post('/logout', { preHandler: auth }, async(request,reply)=>{
+    //     const {error}=userLogoutValidation.validate(request.headers);
+    //     if(error){
+    //         return reply.status(400).send({
+
+    //             error:'Bad Request',
+    //             message:'The authorization header is required',
+    //             })
+    //     }
+    // },logout); // logout route
+
+    fastify.post('/logout', {
+        preHandler: async (request, reply) => {
+
+            
+            
+
+          
+console.log(request.headers['authorization'],"this is the request header for me ");
+
+console.log(request.headers)
+            const { error } = userLogoutValidation.validate({
+                authorization: request.headers['authorization'], // Accessing the header value
+            });
+
+
+            if (error) {
+                return reply.status(400).send({
+
+                    error: 'Bad Request',
+                    message: 'Validation failed in the header requirement not matching',
+                });
+            }
+
+            await auth(request, reply);
+        }
+    }, logout); // logout route
+
+
+
+}
+
+export default authroutes;
+

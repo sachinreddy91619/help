@@ -1,0 +1,264 @@
+
+
+ git clone https://github.com/qodic-technosoft/Event-management.git
+
+
+git fetch origin
+git branch -a
+git checkout Sachin
+git checkout -b sai origin/sai
+npm init -y
+git add package.json
+git commit -m "Initialize Node.js project"
+
+git config user.name "Sachinqodic"
+git config user.email "sachin@qodictechnosoft.com"
+
+ and email : 
+
+
+git push origin Sachin  # If you're working on the sai branch
+
+
+npm install 
+git checkout -b feature/create-user
+git branch
+
+tep 8: Create Controllers, Models, and Routes
+Now, we will create separate controllers and models for each feature. For each functionality (like create, update, etc.), you will create:
+
+Controller: Logic for CRUD operations
+Model: Schema and validation for the resource
+Routes: Define the HTTP routes that map to controller
+
+git add .
+
+git commit -m "Implemented create user functionality"
+git push origin feature/create-user
+
+...>  (use "git restore <file>..." to discard changes in working directory)
+
+
+
+
+..................................>
+You can verify the URL that Git is using for the remote repository with the following command:
+git remote -v
+
+..................................>
+
+
+
+====================================>
+
+# Initial setup
+git checkout Sachin  # or your base branch
+npm init -y  # Initialize Node.js project
+# Add app.js, .env, and other necessary files
+git add app.js .env
+git commit -m "Initial setup: Added app.js and .env"
+git push origin Sachin
+
+# Start creating feature branches
+git checkout -b feature/create-event
+# Implement create event functionality (controllers, routes)
+git add .
+git commit -m "Implemented create event functionality"
+git push origin feature/create-event
+
+git checkout -b feature/get-events
+# Implement get events functionality
+git add .
+git commit -m "Implemented get events functionality"
+git push origin feature/get-events
+
+# Continue for other features...
+
+git log --oneline --graph --decorate --all
+
+
+
+====================>==>
+on sachin only created the app.js and .env files:
+git add .
+git commit -m "intial sevrer setup"
+git push origin Sachin
+
+
+======================>==>
+
+
+git checkout -b feature/create-user
+
+..> to delte the branch
+git branch -d branch_name
+
+..>If you want to force delete a branch, even if it hasn’t been merged, use the -D flag:
+git branch -D branch_name
+
+
+..>If the branch is on a remote (like GitHub) and you want to delete it, you can run:
+git push origin --delete branch_name
+
+..>Important note: You cannot delete the branch you're currently on, so make sure to switch to a different branch first if needed:
+git checkout main
+
+
+
+..> qodic22@DESKTOP-BDT26P6 MINGW64 ~/Desktop/FASTIFY/FASTIFY-ROLE (master)
+$ git remote set-url origin https://github.com/sachinreddy91619/Fast-Role.git
+to move from the existing repo to the new repository file add the files 
+
+
+
+============================================>
+Yes, you can certainly add changes to the app.js file in your current branch and push them. Let's go through the scenario you described and provide the correct steps and commands:
+
+What You Have Done So Far:
+On the sachin branch, you added app.js, staged it (git add .), committed it (git commit -m "Initial commit with app.js"), and pushed it to the remote branch (git push origin sachin).
+Then, you created a new branch (create-functionality), added some files, staged them (git add .), and committed them (git commit -m "Created functionality").
+Your Current Requirement:
+You don't want to push the changes on your create-functionality branch right now.
+You want to add more changes to app.js and push them to the sachin branch (since app.js is already part of sachin).
+Steps:
+1. Ensure you're on the sachin branch:
+Since you want to push changes to app.js and sachin is where app.js exists, make sure you're on the sachin branch before making the changes.
+
+Run the following command to check which branch you are on:
+
+bash
+Copy
+git branch
+If you’re on create-functionality, switch to sachin:
+
+bash
+Copy
+git checkout sachin
+2. Make changes to app.js:
+Now, you can modify app.js as needed to add the additional functionality.
+
+3. Stage the changes in app.js:
+After modifying app.js, you need to stage the changes:
+
+bash
+Copy
+git add app.js
+4. Commit the changes to app.js:
+Now, commit the changes you made to app.js:
+
+bash
+Copy
+git commit -m "Added new functionality to app.js"
+5. Push the changes to the sachin branch:
+Finally, push your commit to the sachin branch on the remote repository:
+
+bash
+Copy
+git push origin sachin
+What About the create-functionality Branch?
+Since you mentioned that you don't want to push the changes from the create-functionality branch yet, that branch will remain unaffected by these steps. You can continue working on it, and when you're ready, you can push it.
+
+If you need to switch back to create-functionality later:
+
+bash
+Copy
+git checkout create-functionality
+Summary of Commands:
+Switch to sachin branch (if not already on it):
+
+bash
+Copy
+git checkout sachin
+Make changes to app.js.
+
+Stage and commit changes to app.js:
+
+bash
+Copy
+git add app.js
+git commit -m "Added new functionality to app.js"
+Push changes to the sachin branch:
+
+bash
+Copy
+git push origin sachin
+You can continue working on your other branches (like create-functionality) without any issues, as the changes to app.js are being pushed only to sachin.
+
+======================================================================================================================================================================================================================================================================================================================================================
+
+
+1) Make sure you're not currently on the branch you want to delete.
+Switch to a different branch (e.g., sachin) before deleting it:
+
+..> git checkout sachin
+
+
+2) Delete the branch locally: Use the following command to delete the feature/logoutfunc branch locally:
+
+..> git branch -d feature/logoutfunc
+
+3) If the branch has unmerged changes and you want to force delete it, use:
+
+..> git branch -D feature/logoutfunc
+
+4) Delete the branch remotely (if it was pushed to a remote repository): If the branch was pushed to a remote repository (e.g., GitHub), you can delete it with:
+
+..> git push origin --delete feature/logoutfunc
+
+
+
+
+note: i have the sachin branch and  in that i have the app file and in created the feature/post branch  and added some files then  i crea
+
+
+to check current user and email looged in the git bash :
+
+..> git config user.name
+
+..> git config user.email
+
+======================================================================================================================================================================================================================================================================================================================================================
+
+...> PULLING THE CODE FROM THE REPO :
+
+.> git status
+
+Pull the latest changes from the remote repository: You can now fetch the latest updates from the GitHub repository using the following command:
+
+.> git pull https://github.com/sachinreddy91619/NEW-FASTi.git (main/MASTER)
+
+.> TO SEE ALL THE BRANCH'S
+.> git branch -a 
+
+
+Resolve conflicts (if any): If there are conflicts, Git will notify you, and you'll need to resolve them manually. Once done, stage and commit the changes.
+
+.> git add .
+.> git commit -m "Resolved conflicts and synced with remote"
+
+======================================================================================================================================================================================================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

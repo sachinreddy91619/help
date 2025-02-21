@@ -1,0 +1,35 @@
+{
+    "username":"ram",
+    "password":"ram123",
+    "email":"ram@123",
+    "role":"admin"
+    }
+
+
+
+=======================>
+
+{
+  "eventname":"ram-tech-program",
+    "eventdate":"2025-02-03",
+            "eventlocation":"nkd",
+    "amountrange":40000,
+    "eventtime":"18:15:10"
+           
+}
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OTA4ODEyYTJhM2U3N2Y4YmY3YzhlNyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNzUyNTMyOX0.MRWgRN3oghCX9Wk9UNoLaD17-smrBsPu2-L0zLCh6ZY
+
+
+{
+    "username":"balaya",
+    "password":"balaya123"
+    }
+
+
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OGZhNGQ1MzVjMzZkMjlhYTMwYTJhYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM3NDY3MTA4fQ.5XhUvW_4-SyDeeEobzwcVOPSbyhdeg7CaATArJSfG4M
+
+
+
+http://localhost:3021/event/eventit/678f9fadbcd274aec25ed4d8

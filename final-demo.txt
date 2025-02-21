@@ -1,0 +1,285 @@
+{
+    "username":"vjit",
+    "password":"vjit123",
+    "email":"vjit123@gamil.com",
+    "role":"admin"
+
+}
+=================================
+{
+    "username":"vjit",
+    "password":"vjit123"
+}
+
+=================================
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWI3NzdmM2I1NmE3YjQ3ODAyNzliYSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODI0MTk5OX0.K1WFUjwfLTvgcQT96YfF4LNil5zNM0XF_dwE2GBfgzI
+
+
+=================================
+
+{
+    "amountrange": 10,
+    "eventname": "coding-challenge",
+    "eventdate": "2043-02-03",
+    "eventlocation": "nkd",
+    "eventtime": "18:15:10",
+    "totalseats": 100,
+    "availableseats": 100,
+    "bookedseats": 0
+}
+
+=================================
+
+{
+    "amountrange": 10,
+    "eventname": "coding-challenge",
+    "eventdate": "2043-02-03T00:00:00.000Z",
+    "eventlocation": "nkd",
+    "eventtime": "18:15:10",
+    "totalseats": 100,
+    "availableseats": 100,
+    "bookedseats": 0,
+    "userId": "679b777f3b56a7b4780279ba",
+    "_id": "679b78c33b56a7b4780279bd",
+    "__v": 0
+}
+
+==========================================================================================================================================================================================================================================================================================================================================
+{
+    "username":"CBIT",
+    "password":"CBIT123",
+    "email":"CBIT123@gamil.com",
+    "role":"admin"
+
+}
+
+=================================
+
+{
+    "amountrange": 10,
+    "eventname": "web-development-challenge",
+    "eventdate": "2043-02-03T00:00:00.000Z",
+    "eventlocation": "nkd",
+    "eventtime": "18:15:10",
+    "totalseats": 100,
+    "availableseats": 100,
+    "bookedseats": 0,
+    "userId": "679b797c3b56a7b4780279c0",
+    "_id": "679b80053b56a7b4780279c3",
+    "__v": 0
+}
+
+
+{
+    "username":"CBIT",
+    "password":"CBIT123"
+    
+}
+
+=================================
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWI3OTdjM2I1NmE3YjQ3ODAyNzljMCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODI0MjUxNX0.uCLBnxQnHjPEu_1S1I9-fGCN7VqYV_zLBUTLA3oO1Yw
+
+
+=================================
+
+
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWI3OTdjM2I1NmE3YjQ3ODAyNzljMCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczODI0MjUxNX0.uCLBnxQnHjPEu_1S1I9-fGCN7VqYV_zLBUTLA3oO1Yw
+
+
+===================================
+
+{
+    "amountrange": 10,
+    "eventname": "web-development-challenge",
+    "eventdate": "2043-02-03T00:00:00.000Z",
+    "eventlocation": "nkd",
+    "eventtime": "18:15:10",
+    "totalseats": 100,
+    "availableseats": 100,
+    "bookedseats": 0,
+    "userId": "679b797c3b56a7b4780279c0",
+    "_id": "679b80053b56a7b4780279c3",
+    "__v": 0
+}
+
+
+===================================
+
+{
+    "username":"dog",
+    "password":"dog123",
+    "email":"dog123@gamil.com",
+    "role":"user"
+
+}
+
+
+===================================
+
+
+{
+    "username":"dog",
+    "password":"dog123"
+   
+}
+
+
+===================================
+
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWI4MTQ0M2I1NmE3YjQ3ODAyNzljNiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM4MjQ0NTI0fQ.tgY0N8IVGLSypGjOmz0JYFm5ZhZEotm3wqF8xd-SNH0
+
+
+===================================
+
+
+{
+    "eventneedlocation": "nkd",
+    "_id": "679b82d93b56a7b4780279c9",
+    "__v": 0
+}
+
+===================================
+
+{
+
+"eventStatus": "Booked",
+    
+    "NoOfSeatsBooking": 5
+
+}
+
+
+
+
+===================================
+
+{
+    "eventid": "679b78c33b56a7b4780279bd",
+    "amountrange": 10,
+    "eventname": "coding-challenge",
+    "eventdate": "2043-02-03T00:00:00.000Z",
+    "eventlocation": "nkd",
+    "eventtime": "18:15:10",
+    "eventManager": "vjit",
+    "eventManagerEmail": "vjit123@gamil.com",
+    "eventStatus": "Booked",
+    "eventBookedBy": "dog",
+    "email": "dog123@gamil.com",
+    "NoOfSeatsBooking": 5,
+    "AmountNeedPay": 50,
+    "userId": "679b81443b56a7b4780279c6",
+    "_id": "679b84403b56a7b4780279d0",
+    "__v": 0
+}
+
+
+==========================================
+
+
+{
+
+"eventStatus": "Booked",
+    
+    "NoOfSeatsBooking": 5
+
+}
+
+
+==========================================
+
+{
+    "eventid": "679b80053b56a7b4780279c3",
+    "amountrange": 10,
+    "eventname": "web-development-challenge",
+    "eventdate": "2043-02-03T00:00:00.000Z",
+    "eventlocation": "nkd",
+    "eventtime": "18:15:10",
+    "eventManager": "CBIT",
+    "eventManagerEmail": "CBIT123@gamil.com",
+    "eventStatus": "Booked",
+    "eventBookedBy": "dog",
+    "email": "dog123@gamil.com",
+    "NoOfSeatsBooking": 5,
+    "AmountNeedPay": 50,
+    "userId": "679b81443b56a7b4780279c6",
+    "_id": "679b84d13b56a7b4780279d7",
+    "__v": 0
+}
+
+
+==========================================
+
+
+[
+    {
+        "_id": "679b84403b56a7b4780279d0",
+        "eventid": "679b78c33b56a7b4780279bd",
+        "amountrange": 10,
+        "eventname": "coding-challenge",
+        "eventdate": "2043-02-03T00:00:00.000Z",
+        "eventlocation": "nkd",
+        "eventtime": "18:15:10",
+        "eventManager": "vjit",
+        "eventManagerEmail": "vjit123@gamil.com",
+        "eventStatus": "Booked",
+        "eventBookedBy": "dog",
+        "email": "dog123@gamil.com",
+        "NoOfSeatsBooking": 5,
+        "AmountNeedPay": 50,
+        "userId": "679b81443b56a7b4780279c6",
+        "__v": 0
+    },
+    {
+        "_id": "679b84d13b56a7b4780279d7",
+        "eventid": "679b80053b56a7b4780279c3",
+        "amountrange": 10,
+        "eventname": "web-development-challenge",
+        "eventdate": "2043-02-03T00:00:00.000Z",
+        "eventlocation": "nkd",
+        "eventtime": "18:15:10",
+        "eventManager": "CBIT",
+        "eventManagerEmail": "CBIT123@gamil.com",
+        "eventStatus": "Booked",
+        "eventBookedBy": "dog",
+        "email": "dog123@gamil.com",
+        "NoOfSeatsBooking": 5,
+        "AmountNeedPay": 50,
+        "userId": "679b81443b56a7b4780279c6",
+        "__v": 0
+    }
+]
+
+==========================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

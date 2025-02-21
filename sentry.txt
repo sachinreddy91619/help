@@ -1,0 +1,240 @@
+import * as Sentry from "@sentry/node";
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+
+// Ensure to call this before importing any other modules!
+Sentry.init({
+  dsn:"https://d7452b6c86e81ebb5746d73b0233dbd4@o4508839985086464.ingest.us.sentry.io/4508850576556032",
+
+
+  integrations: [
+    // Add our Profiling integration
+    nodeProfilingIntegration(),
+  ],
+
+  // Add Tracing by setting tracesSampleRate
+  // We recommend adjusting this value in production
+
+  tracesSampleRate: 1.0, // capture 100% of transactions for performance monitoring
+
+  // Set sampling rate for profiling
+  // This is relative to tracesSampleRate
+  profilesSampleRate: 1.0,
+});
+
+Sentry.profiler.startProfiler();
+
+
+    Sentry.startSpan(
+        {
+         
+          name: "My First Transaction",
+        },
+        () => {
+          // Any code in this callback will be profiled.
+        }
+      );
+    
+    
+Sentry.profiler.stopProfiler();
+    
+export default Sentry;
+
+
+and in my app  .js iam using the 
+...................................>
+
+import  './instrument.mjs';  
+import * as Sentry from "@sentry/node";
+
+import fastify from 'fastify';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import eventRou from './routes/eventroutes.js';
+import authRou from './routes/authroutes.js';
+
+
+
+dotenv.config();
+
+const app = fastify({
+    logger: true
+});
+
+Sentry.setupFastifyErrorHandler(app);
+
+
+console.log("the server started successfully");
+mongoose.connect(process.env.MONGO_URL)
+    .then(() => {
+        app.log.info('Database connected successfully');
+        
+    })
+    .catch((err) => {
+        app.log.error('MongoDB not connected successfully', err);
+        //Sentry.captureException(err);
+       
+    });
+
+app.register(eventRou, { prefix: '/event' });
+app.register(authRou, { prefix: '/auth' });
+
+app.setErrorHandler((error, request, reply) => {
+    app.log.error('Error:', error);
+    reply.status(500).send({ error: error.message });
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, (err, address) => {
+    if (err) {
+        app.log.error(err);
+        process.exit(1);
+    }
+    app.log.info(`Server listening on ${address}`);
+});
+
+console.log(`the server listening on port ${PORT}`);
+
+export default app;
+
+and when i run the app iam getting teh error has 
+
+
+[Sentry] You are using Node.js in ESM mode ("import syntax"). The Sentry Node.js SDK is not compatible with ESM in Node.js versions before 18.19.0 or before 20.6.0. Please either build your application with CommonJS ("require() syntax"), or upgrade your Node.js version.
+Starting authopera.js...
+[Sentry] fastify is not instrumented. Please make sure to initialize Sentry in a separate file that you `--import` when running node, see: https://docs.sentry.io/platforms/javascript/guides/fastify/install/esm/.
+
+
+
+export const configureSentry = () => {
+  // Ensure to call this before importing any other modules!
+  Sentry.init({
+    dsn: "https://d7452b6c86e81ebb5746d73b0233dbd4@o4508839985086464.ingest.us.sentry.io/4508850576556032",
+
+    integrations: [
+      // Add our Profiling integration
+      nodeProfilingIntegration(),
+    ],
+
+    // Add Tracing by setting tracesSampleRate
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0, // capture 100% of transactions for performance monitoring
+
+    // Set sampling rate for profiling
+    // This is relative to tracesSampleRate
+    profilesSampleRate: 1.0,
+  });
+
+  Sentry.profiler.startProfiler();
+
+  Sentry.startSpan(
+    {
+      name: "My First Transaction",
+    },
+    () => {
+      // Any code in this callback will be profiled.
+    }
+  );
+
+  Sentry.profiler.stopProfiler();
+};
+Here, I wrapped your Sentry setup in a function called configureSentry, which will make it easier to import and call in app.js.
+
+2. Importing and Using in app.js
+Now, in your app.js file, you can import the function and call it:
+
+js
+Copy
+// app.js
+import { configureSentry } from './instrument.mjh';
+
+// Call the configureSentry function to initialize Sentry
+configureSentry();
+
+
+
+// instrument.mjh
+import * as Sentry from "@sentry/node";
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+
+// Ensure to call this before importing any other modules!
+Sentry.init({
+  dsn: "https://d7452b6c86e81ebb5746d73b0233dbd4@o4508839985086464.ingest.us.sentry.io/4508850576556032",
+
+  integrations: [
+    // Add our Profiling integration
+    nodeProfilingIntegration(),
+  ],
+
+  // Add Tracing by setting tracesSampleRate
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0, // capture 100% of transactions for performance monitoring
+
+  // Set sampling rate for profiling
+  // This is relative to tracesSampleRate
+  profilesSampleRate: 1.0,
+});
+
+Sentry.profiler.startProfiler();
+
+Sentry.startSpan(
+  {
+    name: "My First Transaction",
+  },
+  () => {
+    // Any code in this callback will be profiled.
+  }
+);
+
+Sentry.profiler.stopProfiler();
+
+// Exporting the setup to be used elsewhere
+export { Sentry };
+// instrument.mjh
+import * as Sentry from "@sentry/node";
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+
+// Ensure to call this before importing any other modules!
+Sentry.init({
+  dsn: "https://d7452b6c86e81ebb5746d73b0233dbd4@o4508839985086464.ingest.us.sentry.io/4508850576556032",
+
+  integrations: [
+    // Add our Profiling integration
+    nodeProfilingIntegration(),
+  ],
+
+  // Add Tracing by setting tracesSampleRate
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0, // capture 100% of transactions for performance monitoring
+
+  // Set sampling rate for profiling
+  // This is relative to tracesSampleRate
+  profilesSampleRate: 1.0,
+});
+
+Sentry.profiler.startProfiler();
+
+Sentry.startSpan(
+  {
+    name: "My First Transaction",
+  },
+  () => {
+    // Any code in this callback will be profiled.
+  }
+);
+
+Sentry.profiler.stopProfiler();
+
+// Default export
+export default Sentry;
+// app.js
+import Sentry from './instrument.mjh';  // Adjust the path if needed
+
+// You can now use Sentry directly, as it has already been initialized
+console.log(Sentry);  // To confirm it's correctly imported and initialized
+
+// Your other app logic here
+
+Sachin@123
+
+

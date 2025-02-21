@@ -1,0 +1,478 @@
+import fastify from 'fastify';
+import bcrypt from 'bcrypt';
+import User from '../models/Users.js';
+import jwt from 'jsonwebtoken';
+
+//import { backlisted } from '../middleware/authmiddle.js';
+
+const eee=fastify({
+    logger:true
+})
+import app from '../app.js';
+
+
+
+export const register=async(request,reply)=>{
+    const {username,password,email,role}=request.body;
+
+
+
+
+    try{
+
+        const existingUser=await User.findOne({username});
+        if(existingUser){
+            return reply.status(400).send({error:'Username already exists. Try with another username'});
+        }
+        const user=new User({username,email,password,role}); 
+
+        await user.save();  
+        reply.status(201).send({message:'user created successfully'});
+
+    }
+    catch(err){
+        console.error('Error creating the user',err);
+        reply.status(400).send({error:'error creating the user'});
+    }
+}
+
+export const login=async (request,reply)=>{
+    const {username,password}=request.body;
+    try{
+        const user=await User.findOne({username});
+        if(!user){
+            return reply.status(400).send({error:'user not found'});
+        }
+
+        const ismatch=await bcrypt.compare(password,user.password);
+
+        if(!ismatch) return reply.status(400).send({error:'invalid credentials'});
+
+        const payload={id:user._id,role:user.role};
+
+        const token=jwt.sign(payload,process.env.SEC);
+
+        reply.send({token});
+
+
+    }catch(err){
+        console.error('Error durign the login',err);
+        reply.status(400).send({error:'error while login in the user'});
+    }
+};
+
+
+
+
+
+
+export const logout= async (request,reply)=>{
+
+    try{
+
+        const authHeader=request.headers['authorization'];
+
+        const token=authHeader && authHeader.split(' ')[1];
+
+        if(!token) 
+            {
+return reply.status(401).send({error:'token required for the logging out functionality'})
+            }
+
+            if(!global.backlistedTokens){
+                global.backlistedTokens=[];
+
+            }
+            
+            global.backlistedTokens.push(token);
+            console.log('Token blacklisted:', token);
+            console.log('Blacklisted tokens:', global.backlistedTokens);
+            //console.log(global.backlistedTokens); 
+            reply.send({message:'user logged out successfully'})
+
+    }
+    
+    catch(err){
+        console.error('Error durign the logout',err);
+        reply.status(400).send({error:'error while logout in the current-user'});
+
+
+    }
+    
+};
+==========================================================> ============================================================================> ============================================================> ==============================================================================>
+
+
+export const login=async (request,reply)=>{
+    const {username,password}=request.body;
+    try{
+        const user=await User.findOne({username});
+        if(!user){
+            return reply.status(400).send({error:'user not found'});
+        }
+
+        const ismatch=await bcrypt.compare(password,user.password);
+
+        if(!ismatch) return reply.status(400).send({error:'invalid credentials'});
+
+        const payload={id:user._id,role:user.role};
+
+        const token=jwt.sign(payload,process.env.SEC);
+
+        reply.send({token});
+
+
+    }catch(err){
+        console.error('Error durign the login',err);
+        reply.status(400).send({error:'error while login in the user'});
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+describe ("testing when an error occurs during user creation catch block",()=>{
+
+    test("should respond with a status code of 500",async()=>{
+
+                Users.findOne.mockResolvedValue(null);
+
+                const mockSave=jest.fn().mockRejectedValue(new Error('Database error'));
+
+                Users.prototype.save=mockSave;
+                const bodydata={
+                    username:"username",
+                    password:"password",
+                    email:"email",
+                    role:"role"
+                }
+
+                const response=await app.inject({
+                    method:'POST',
+                    url:'/auth/register',
+                    payload:bodydata
+                });
+
+        expect(response.statusCode).toBe(500);
+        expect(response.headers['content-type']).toEqual(expect.stringContaining('application/json'));
+        expect(JSON.parse(response.body)).toEqual({
+            error:"error creating the user"
+        })
+        expect(mockSave).toHaveBeenCalledTimes(1);
+        })
+    })
+=======================================================>
+
+test cases for the :
+
+1. Test Case: Event Date is in the Past
+Description:
+This test checks if the server returns a 400 error when the eventdate is in the past.
+
+javascript
+Copy
+describe('Event Creation', () => {
+  test('should return 400 if the event date is in the past', async () => {
+    // Setup: past event date
+    const pastDate = new Date('2020-01-01').toISOString();
+
+    const response = await request(server)
+      .post('/create')
+      .send({
+        eventname: 'Test Event',
+        eventdate: pastDate,  // Invalid event date (in the past)
+        eventlocation: 'test location',
+        amountrange: '100-200',
+        eventtime: '12:00',
+      });
+
+    // Expected: 400 error because the date is in the past
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'Bad Request');
+    expect(response.body.message).toBe('Event date must be in the future.');
+  });
+});
+2. Test Case: Successful Event Creation
+Description:
+This test checks if an event is successfully created when all the necessary fields are provided, and the event date is in the future.
+
+javascript
+Copy
+describe('Event Creation', () => {
+  test('should create an event successfully if all fields are valid', async () => {
+    // Setup: future event date
+    const futureDate = new Date(Date.now() + 10000000).toISOString();
+
+    const response = await request(server)
+      .post('/create')
+      .send({
+        eventname: 'Valid Event',
+        eventdate: futureDate,  // Valid event date (in the future)
+        eventlocation: 'valid location',
+        amountrange: '50-100',
+        eventtime: '10:00',
+      });
+
+    // Expected: Event should be created successfully and returned
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('eventname', 'Valid Event');
+    expect(response.body).toHaveProperty('eventdate', futureDate);
+  });
+});
+3. Test Case: Database Error During Save (event.save())
+Description:
+This test simulates a database error (e.g., event.save() fails) and checks if the function returns a 400 error with the database error message.
+
+javascript
+Copy
+describe('Event Creation', () => {
+  test('should return 400 if there is a database error during event creation', async () => {
+    // Mock the event.save method to simulate a database error
+    jest.spyOn(Event.prototype, 'save').mockRejectedValue(new Error('Database Error'));
+
+    const response = await request(server)
+      .post('/create')
+      .send({
+        eventname: 'Test Event',
+        eventdate: new Date(Date.now() + 10000000).toISOString(),
+        eventlocation: 'valid location',
+        amountrange: '100-200',
+        eventtime: '12:00',
+      });
+
+    // Expected: 400 error with the database error message
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'Database Error');
+  });
+});
+4. Test Case: Missing Required Fields (e.g., eventname)
+Description:
+This test checks if the server returns a 400 error when a required field (e.g., eventname) is missing from the request body.
+
+javascript
+Copy
+describe('Event Creation', () => {
+  test('should return 400 if the required field "eventname" is missing', async () => {
+    const response = await request(server)
+      .post('/create')
+      .send({
+        eventdate: new Date(Date.now() + 10000000).toISOString(),
+        eventlocation: 'valid location',
+        amountrange: '100-200',
+        eventtime: '12:00',
+      });
+
+    // Expected: 400 error because "eventname" is required
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'Bad Request');
+    expect(response.body.message).toBe('body should have required property \'eventname\'');
+  });
+});
+5. Test Case: Missing Event Date
+Description:
+This test checks if the server returns a 400 error when the eventdate is missing from the request body.
+
+javascript
+Copy
+describe('Event Creation', () => {
+  test('should return 400 if the required field "eventdate" is missing', async () => {
+    const response = await request(server)
+      .post('/create')
+      .send({
+        eventname: 'Test Event',
+        eventlocation: 'valid location',
+        amountrange: '100-200',
+        eventtime: '12:00',
+      });
+
+    // Expected: 400 error because "eventdate" is required
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'Bad Request');
+    expect(response.body.message).toBe('body should have required property \'eventdate\'');
+  });
+});
+6. Test Case: Invalid eventdate Format
+Description:
+This test checks if the server returns a 400 error when an invalid date format is provided for eventdate.
+
+javascript
+Copy
+describe('Event Creation', () => {
+  test('should return 400 if the "eventdate" format is invalid', async () => {
+    const response = await request(server)
+      .post('/create')
+      .send({
+        eventname: 'Test Event',
+        eventdate: 'invalid-date-format',  // Invalid date format
+        eventlocation: 'valid location',
+        amountrange: '100-200',
+        eventtime: '12:00',
+      });
+
+    // Expected: 400 error because "eventdate" format is invalid
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'Bad Request');
+    expect(response.body.message).toBe('Event date must be in the future.');
+  });
+});
+Summary of the Test Cases:
+Event Date in the Past: Verifies that an event date in the past returns a 400 error.
+Successful Event Creation: Verifies that a valid event creation returns the correct 200 response.
+Database Error: Simulates a database error and checks that a 400 error is returned with the error message.
+Missing Required Fields: Ensures that missing required fields (like eventname) return a 400 error.
+Missing Event Date: Checks for a 400 error when eventdate is missing.
+Invalid Event Date Format: Checks that an invalid eventdate format returns a 400 error.
+================================================================================================================================>
+
+
+import Users from '../../models/Users.js'; // Adjust path as necessary
+const mockSave = Users.save;
+
+
+
+import request from 'supertest';
+import app from '../../app.js'; // Your Fastify app
+import Users from '../../models/Users.js'; // Import the Users model
+
+jest.mock('../../models/Users.js'); // Mock Users model
+
+describe('POST /register', () => {
+
+  it('should register a new user successfully with valid data', async () => {
+    // Mock the User model save function
+    Users.save.mockResolvedValue({}); // Mock save method
+
+    const response = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'testuser@example.com',
+        password: 'Password123',
+        role: 'user',
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body.message).toBe('user created successfully');
+  });
+
+  it('should return a 400 error if username is missing', async () => {
+    const response = await request(app)
+      .post('/register')
+      .send({
+        email: 'testuser@example.com',
+        password: 'Password123',
+        role: 'user',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Missing required fields');
+  });
+
+  it('should return a 400 error if email is invalid', async () => {
+    const response = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'invalid-email',
+        password: 'Password123',
+        role: 'user',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Invalid email address');
+  });
+
+  it('should return a 400 error if password does not meet criteria', async () => {
+    const response = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'testuser@example.com',
+        password: 'short',
+        role: 'user',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Password must contain at least 8 characters, one uppercase letter, one lowercase letter, and one number');
+  });
+
+  it('should return a 400 error if the role is invalid', async () => {
+    const response = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'testuser@example.com',
+        password: 'Password123',
+        role: 'invalidRole',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Role must be either user or admin');
+  });
+
+  it('should return a 400 error if the username already exists', async () => {
+    // Mock the User model findOne function to simulate an existing user
+    Users.findOne.mockResolvedValue({ username: 'testuser' });
+
+    const response = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'newuser@example.com',
+        password: 'Password123',
+        role: 'user',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Username already exists. Try with another username');
+  });
+
+  it('should return a 500 error if there is a server/database issue', async () => {
+    // Mock the save function to simulate a server/database error
+    Users.save.mockRejectedValue(new Error('Database error'));
+
+    const response = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'testuser@example.com',
+        password: 'Password123',
+        role: 'user',
+      });
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe('error creating the user');
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

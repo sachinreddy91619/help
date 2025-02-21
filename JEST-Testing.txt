@@ -1,0 +1,1041 @@
+https://jsonlint.com/
+
+https://circleci.com/blog/api-testing-with-jest/
+
+https://github.com/tcallsen/node-rest-api-jest-tests/blob/main/test/routes/hikes.test.js
+
+installation for the testing part :
+======================================>
+
+..> npm install --save-dev @babel/preset-env babel-jest jest supertest
+
+
+npm install --save-dev @babel/preset-env babel-jest
+
+npm install --save-dev supertest
+
+npm install --save-dev jest
+
+npm install --save-dev supertest
+
+
+ npm install --save-dev @babel/preset-env babel-jest
+
+..>https://github.com/TomDoesTech/Testing-Express-REST-API/blob/main/src/__tests__/product.test.ts
+
+
+..> https://github.com/jasdeepkhalsa/jest-unit-testing-examples
+
+
+..> Jest and Supertest are both popular testing tools, but they serve different purposes and are often used together in the context of testing HTTP APIs and applications.
+
+.> Jest is a JavaScript testing framework commonly used for unit and integration
+ testing in JavaScript/TypeScript applications.
+
+..> Jest is often used for unit testing, integration testing, and mocking JavaScript
+ code.
+
+
+..> Supertest is a testing library specifically designed for testing HTTP APIs (RESTful APIs). It provides an easy-to-use interface to make HTTP requests and assert responses from your API endpoints.
+
+
+..> It is typically used in conjunction with a framework like Jest, Mocha, or Jasmine 
+to perform integration testing on HTTP requests
+
+
+JEST :
+==========>
+Jest:
+
+..> Jest is used to test JavaScript code at any level: unit, integration, or end-to-end testing. You can test functions, modules, and components.
+..> It can be used for testing React components, Node.js functions, and much more.
+
+
+SUPER-TEST:
+============>
+
+..> Supertest is specifically used for testing HTTP requests in your API, often in combination with a backend framework like Express or Fastify.
+..> It’s ideal for writing tests for RESTful APIs.
+
+
+
+
+
+
+Installation of JEST:
+
+
+npm install --save-dev jest
+npm install jest --save-dev
+
+..> By default, Jest doesn't support import unless your project is set up to handle ES modules.
+
+
+
+
+ex: For the jest testing:
+================================>
+sum.js
+=======>
+
+
+
+sum-test.js
+
+Installation of SuperTest:
+
+npm install --save-dev supertest
+
+
+
+For the superTesting:
+==================================> 
+const request = require('supertest');
+const app = require('./app'); // Express app
+
+describe('GET /users', () => {
+  it('should return a 200 status and user data', async () => {
+    const response = await request(app).get('/users');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(expect.arrayContaining([expect.objectContaining({ id: expect.any(Number), name: expect.any(String) })]));
+  });
+});
+
+
+data:
+=========>
+Use Supertest for:
+Testing endpoints (GET, POST, PUT, DELETE) of your API.
+Testing API behaviors like status codes, headers, and response bodies.
+Writing integration tests for your server or backend application.
+
+jest with the SuperTest :
+==============================>
+In many cases, you will use Jest and Supertest together for testing an API:
+
+Jest will be your test runner and handle assertions, mockings, and reporting.
+Supertest will be used to send HTTP requests to the server and check the API's responses.
+
+==============================================================================================>==============================================================================================>==============================================================================================>
+
+
+
+
+
+
+
+
+const app = express()
+
+app.use(express.json())
+app.post('/users', async (req, res) => {
+  const { password, username } = req.body
+  if (!password || !username) {
+    res.sendStatus(400)
+    return
+  }
+
+  res.send({ userId: 0 })
+})
+
+export default app
+
+
+...> :
+
+expect(response.body.userId).toBeDefined(); means the test checks that userId is defined in the response (it checks if it's not undefined).
+ex:
+test("response has event data", async () => {
+  const response = await request(app).post("/users").send({
+    username: "username",
+    password: "password"
+  });
+
+  // Check if response body has "name"
+  expect(response.body.name).toBeDefined();
+});
+
+
+...> If you want to check for multiple fields in the response, you could write multiple assertions:
+
+ex:
+
+test("response has event data", async () => {
+  const response = await request(app).post("/users").send({
+    username: "username",
+    password: "password"
+  });
+
+  // Check if specific fields are defined in the response
+  expect(response.body.name).toBeDefined();
+  expect(response.body.amount).toBeDefined();
+  expect(response.body.eventName).toBeDefined();
+});
+
+
+..............>
+expect(response.body.eventName).toBeDefined();
+  expect(response.body).toHaveProperty('name');
+  expect(response.body).toHaveProperty('amount');
+=======>
+In this case, you're testing both for the existence of important fields (toBeDefined()) and for the presence of other fields (toHaveProperty()).
+
+
+==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>
+
+
+Post scnario:
+
+// Mocking your model and bcrypt
+jest.mock('../../models/logicD'); // Mock the LoginD model
+jest.mock('bcryptjs');
+jest.mock('jsonwebtoken');
+
+
+const LoginD = require('../../models/logicD');
+        LoginD.findOne = jest.fn().mockResolvedValue(mockUser);
+        bcrypt.compare = jest.fn().mockResolvedValue(true);  // M
+
+
+In this code snippet, you're mocking two functions for testing purposes using Jest.
+
+LoginD.findOne = jest.fn().mockResolvedValue(mockUser);
+
+LoginD.findOne is likely a database query function (or a method on a model), which is being replaced with a mock function.
+jest.fn() creates a mock function, and mockResolvedValue(mockUser) ensures that this mock function will return a resolved promise with the value of mockUser whenever it's called.
+So, when LoginD.findOne() is called during the test, it will return mockUser as if it was fetched from the database.
+bcrypt.compare = jest.fn().mockResolvedValue(true);
+
+bcrypt.compare is a function that is used to compare a hashed password with a plaintext password (typically used for authentication).
+jest.fn() again creates a mock function, and mockResolvedValue(true) ensures that this mock function will return a resolved promise with the value true.
+So, whenever bcrypt.compare() is called in the test, it will return true, simulating a successful password match.
+
+
+==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>
+
+
+..> beforeEach() is used as a hook in test setups (often in unit or integration tests), specifically in testing frameworks like Mocha, Jest, or others
+
+..> It's used, particularly when you're dealing with routes that require authentication (like using a token with a Bearer and Authorization header).
+
+
+..> The beforeEach() function is part of the testing framework that runs before each individual test in a suite. It's commonly used for setting up the environment, initializing variables, 
+
+...> 
+
+ex:
+
+beforeEach(() => {
+    app.set('req', { user: mockUser });
+});
+
+
+
+...> This ensures that before every test runs, the application’s req object is set up with a mock authenticated user (mockUser).
+
+
+...> If your routes require an authenticated user, it's essential that this setup happens for every test that involves authentication, so each test gets a consistent state.
+
+
+...> 
+Example in Authentication Context :
+
+..> In an API with routes requiring authentication (like using tokens or session cookies), beforeEach() would help you set up the mock authentication data for every test that needs it.
+
+...>
+
+
+ex:
+beforeEach(() => {
+    // Mock the user that would be authenticated
+    const mockUser = { id: '60d9f1b8b7f8d02c4b1c95f6', name: 'John Doe' };
+    
+    // Mock the Authorization header
+    app.set('req', { 
+        user: mockUser, 
+        headers: { 
+            Authorization: 'Bearer your-jwt-token-here'
+        } 
+    });
+});
+
+..> Simulate Authentication for Each Test: If your routes rely on authentication, you need to simulate the presence of a user (like attaching a user object to req) for every test where authentication is needed. This is why you set req.user inside beforeEach().
+
+
+NOTE: app.set('req', { user: mockUser }); is not about setting the ID in the URL or setting an Authorization header. Instead, it's simulating an authenticated user for every request in your tests.
+
+..>
+
+
+==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>
+
+##########
+const mockEvent = {
+    _id: '60d9f1b8b7f8d02c4b1c95f5',
+    userId: '60d9f1b8b7f8d02c4b1c95f6',
+    deleteOne: jest.fn(),
+};
+
+..> This object simulates a real event from the database
+
+..>  _id: The unique identifier of the event.
+userId: The ID of the user who created the event (this should match the user.id from the request in the real app).
+
+..>
+deleteOne: jest.fn(): This mocks the deleteOne method, which is supposed to delete the event from the database. By using jest.fn(), we are creating a mock function that simulates the behavior of the real deleteOne method.
+
+
+###########
+const mockUser = { id: '60d9f1b8b7f8d02c4b1c95f6' }; // Mock user ID
+
+..> mockUser: This object simulates the authenticated user making the request.
+
+..> : The ID of the user (which should match the userId of the event if they are authorized to delete it).
+
+###########
+beforeEach(() => {
+    app.set('req', { user: mockUser });
+});
+
+
+...> beforeEach: This function runs before every individual test case. It ensures that before each test, the req.user object is set to the mockUser.
+
+...>
+
+
+==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>==============================================================================================>
+
+
+
+
+FASTIFY TESTING :
+=====================>
+
+...> The issue you're facing with TypeError: app.address is not a function is happening because supertest expects an Express-like application that exposes an address method, but Fastify does not have this method.
+
+Fastify's API is different from Express, and because of this difference, the integration with supertest needs to be handled differently.
+
+
+
+...> Instead of using supertest with request(app) directly, you need to use Fastify's inject method for making requests in your tests. inject simulates HTTP requests and works seamlessly with Fastify, making it a better choice for testing Fastify apps.
+
+Steps:
+Replace supertest with inject:
+
+Use Fastify's built-in inject function to make requests in your tests.
+inject allows you to send HTTP requests to your Fastify instance without actually starting a server.
+
+..> No need for .listen() and .close():
+
+You don't need to start the server with .listen() in your test setup. Instead, Fastify handles the HTTP requests through inject.
+
+
+=====================================================>=====================================================>=====================================================>=====================================================>vv=====================================================>=====================================================>=====================================================>=====================================================>
+
+..> Users.findOne.mockResolvedValue(null);
+This line is setting up a mock (fake) version of the findOne function from the Users model. Instead of actually going to a database and trying to find a user, it's making it always return null (meaning no user is found).
+
+
+...> const mockSave = jest.fn().mockResolvedValue({});
+This creates a mock version of the save function. jest.fn() is used to create a fake function, and .mockResolvedValue({}) means when save is called, it will return an empty object {} as if the save operation was successful.
+
+....> Users.prototype.save = mockSave;
+This line replaces the real save method in the Users model with the fake one (mockSave) that was just created. So, now, when we try to call save on a user object, it will use the mocked version that returns an empty object.
+
+...>
+
+
+hash passwords in the Testing :
+=====================================>
+
+jest.spyOn(bcrypt, 'compare')
+jest.spyOn is a function that allows us to "spy" on or track calls to an existing function. In this case, it's spying on the compare function inside the bcrypt library.
+bcrypt is a library used for hashing passwords and comparing them to hashed values.
+'compare' is the name of the function inside bcrypt that compares a plain text password to a hashed one.
+When you use jest.spyOn(bcrypt, 'compare'), it means you want to monitor or change how bcrypt.compare behaves during the test. You're telling Jest, "Look at how this function is being used."
+
+2. .mockResolvedValue(false)
+.mockResolvedValue(false) tells Jest to change the behavior of the compare function. Instead of actually comparing passwords, you are making it always return false.
+Returning false means that the function is simulating the situation where the passwords do not match.
+Putting it all together:
+You're spying on bcrypt.compare to control how it behaves during testing.
+Instead of performing the actual password comparison, you tell it to always return false, which simulates that the passwords don’t match (even if they might).
+
+
+
+
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+Test Suites: 1 failed, 1 total
+
+...> Check if Jest is installed locally in your project:
+npm list jest
+
+...> Check if Jest is installed globally:
+npm list -g jest
+
+
+...> 2. Installing Jest Locally
+npm install --save-dev jest
+
+...> 3. Running Jest with npm (Local Installation)
+npx jest --detectOpenHandles
+
+...> 4. Installing Jest Globally
+npm install -g jest
+
+
+...> After that, you should be able to run jest directly from the command line:
+jest --detectOpenHandles
+
+
+...>
+
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+The error you're seeing is likely because you used toBeEqual, which is not a valid matcher in Jest. The correct matcher is toEqual.
+
+Here's the key difference:
+toEqual:
+
+Purpose: Used to compare the values of objects or arrays, checking that they are deeply equal. This means it checks that the values within the object or array match, not just the reference.
+When to Use: Use toEqual when comparing objects, arrays, or any other value where you need to check that the contents are the same, not just the reference.
+javascript
+Copy
+const obj1 = { name: 'John', age: 25 };
+const obj2 = { name: 'John', age: 25 };
+
+expect(obj1).toEqual(obj2);  // Passes because the values are the same
+toBe:
+
+Purpose: Used for comparing primitive values (like numbers, strings, booleans) or checking if two variables refer to the same object reference.
+When to Use: Use toBe for strict equality checks or when comparing primitives.
+javascript
+Copy
+const num1 = 5;
+const num2 = 5;
+
+expect(num1).toBe(num2);  // Passes because both numbers are the same value
+toBeEqual:
+
+Purpose: This is not a valid Jest matcher. It was probably a typo, and that's why you're getting an error. Jest does not have a toBeEqual matcher.
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+
+ jest.spyOn(jwt, 'sign').mockReturnValue('mockedToken');
+
+in different ways: has 
+
+jwt.sign = jest.fn().mockReturnValue('mockedToken');
+
+jwt.sign = jest.fn(() => 'mockedToken');
+
+
+jwt.sign = jest.fn().mockImplementation(() => 'mockedToken');
+
+
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn().mockReturnValue('mockedToken')
+}));
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+Snapshots: 0 total
+Snapshots: Jest has a feature called snapshot testing, where you can save the output of a component or function at a certain point in time and compare it to future runs to ensure the output hasn't changed unexpectedly.
+0 total: You have no snapshots in your test suite. This could mean that you're not using snapshot testing in your tests, or it could indicate that you didn't set up any snapshot tests.
+
+
+..> Check for skipped or pending tests: If there are any skipped tests (marked with it.skip() or test.skip()), they will not run and show up as "not run" in the results.
+
+
+...>
+
+2 Test Suites Failed means that both of your test files (which are each considered a "test suite") have encountered failures.
+2 total indicates you have two test files in total.
+Each of these test files (e.g., test1.js, test2.js) represents a "test suite" in Jest. The fact that both test suites have failed means that all the tests within both of these files failed to pass.
+
+Breakdown:
+Test Suites: This corresponds to your test files (in your case, there are 2 test files).
+Both of the test files (test suites) failed in this case.
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+To run the test cases and get a tabular result with the percentage of successfully passed tests and which files are covered, you need to make a few updates and configurations. Here’s how to achieve this:
+
+Steps to Set Up Test Coverage Reporting
+Install Necessary Packages
+
+You've already installed jest and supertest, but for test coverage and reporting, you'll need to ensure that jest is configured to track coverage and output in a format like lcov (which can be read by tools like Coveralls, or displayed in the terminal).
+
+You can add jest's coverage configuration in the package.json file, and you'll need to install a package to view results in tabular form.
+
+Update package.json for Jest Configuration
+
+Add a Jest configuration in your package.json file that enables coverage reporting. You can also specify the coverageReporters as text and lcov to get both tabular output and detailed reports (LCOV for HTML and text for the terminal).
+
+Update the scripts and jest configuration section as follows:
+
+{
+  "name": "fastify-role",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "fastify": "^3.29.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.9"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.7",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage",
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    }
+  }
+}
+
+==========>
+Explanation of Changes:
+
+"collectCoverage": true: This ensures that Jest collects coverage information during test runs.
+"coverageDirectory": "./coverage": The directory where Jest will output the coverage report.
+"coverageReporters": ["text", "lcov"]: This will produce two types of reports:
+Text format (will be shown in the terminal as a summary).
+LCOV format (can be used to view coverage in a more detailed way in HTML, useful for services like Coveralls).
+"testEnvironment": "node": Ensures Jest uses the node environment, which is typical for testing server-side code.
+"transform": Uses babel-jest to handle transforming JavaScript files.
+Running Tests with Coverage
+
+Now, when you run your tests using the command:
+npm run test
+
+
+================>
+Run the tests.
+Output the test results in the terminal, including the percentage of tests passed and the files that were covered.
+The coverage directory will be created, and it will contain an lcov-report folder where you can open an HTML file (e.g., index.html) to view a detailed tabular coverage report.
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+Optional: Coverage in HTML Format
+
+If you want to see a more detailed and interactive report, after running the tests, open the coverage/lcov-report/index.html in a browser. This will provide you with a full HTML report that includes which lines of code were covered or missed.
+
+Additional Configuration for Jest
+
+If you prefer specific configurations for individual test cases or coverage thresholds (e.g., fail the build if the coverage falls below 80%), you can add to the jest configuration:
+
+
+"jest": {
+  "collectCoverage": true,
+  "coverageDirectory": "./coverage",
+  "coverageReporters": ["text", "lcov"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 80,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
+    }
+  }
+}
+
+...> This will enforce that your coverage does not drop below 80% globally.
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+2. Use concurrently to Run Both Server and Tests Simultaneously
+You can use the concurrently package to run both nodemon and jest in parallel within a single terminal.
+
+Install concurrently:
+bash
+Copy code
+npm install concurrently --save-dev
+
+
+Modify package.json to include the concurrent command:
+json
+Copy code
+{
+  "scripts": {
+    "start": "concurrently \"npm run dev\" \"npm run test\"",
+    "dev": "nodemon app.js",
+    "test": "jest"
+  }
+}
+With this setup:
+
+npm run start will run both the nodemon server and the jest tests concurrently in the same terminal.
+npm run dev will run the server with nodemon.
+npm run test will run the tests with Jest.
+Run both in parallel:
+To run both, execute:
+
+bash
+Copy code
+npm run start
+This will run both nodemon and Jest in parallel.
+
+3. Use tmux or screen (Terminal Multiplexers)
+If you're comfortable with terminal multiplexers, you can use tmux or screen to split your terminal into multiple panes, so you can run the server in one pane and the tests in another.
+
+For example, with tmux:
+
+Open a terminal window and run tmux.
+Split the terminal horizontally or vertically (e.g., Ctrl-b % for vertical).
+In one pane, run npm run dev (this starts your server).
+In the other pane, run npm run jest to run your tests.
+4. Use npm run test in the Background
+You can also run your tests in the background while keeping the server running:
+
+bash
+Copy code
+npm run jest &   # This runs the tests in the background.
+This allows you to keep the terminal free for other tasks while the tests are running in the background.
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+npm test -- --detectOpenHandles
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+
+3. Use an In-Memory Database for Tests
+Another option is to use an in-memory MongoDB instance for running tests. This can be done using the mongodb-memory-server package. This package will run a MongoDB instance purely in-memory, which can be more efficient and prevent the need for a real database.
+
+First, install the mongodb-memory-server package:
+
+bash
+Copy code
+npm install mongodb-memory-server --save-dev
+Then, update your test setup to use it:
+
+javascript
+Copy code
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
+
+let mongoServer;
+
+beforeAll(async () => {
+    mongoServer = await MongoMemoryServer.create();
+    const mongoUri = mongoServer.getUri();
+    await mongoose.connect(mongoUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+});
+
+afterAll(async () => {
+    await mongoose.connection.close(); // Close the in-memory MongoDB connection
+    await mongoServer.stop(); // Stop the in-memory MongoDB server
+});
+4. Check the afterAll Cleanup
+In your afterAll function, you may be trying to close the MongoDB connection or app server, but if there was an issue in connecting to the database earlier, it could lead to mongoose.connection being undefined. By mocking the connection properly, this can be avoided.
+
+Here's an updated version of your test file with a mock for mongoose.connection.close:
+
+javascript
+Copy code
+import fastify from 'fastify';
+import mongoose from 'mongoose';
+import app from '../../app.js';
+import request from 'supertest';
+
+// Mock mongoose connection and methods
+jest.mock('mongoose', () => {
+    const actualMongoose = jest.requireActual('mongoose');
+    return {
+        ...actualMongoose,
+        connection: {
+            close: jest.fn(), // Mocking the `close` method of the connection
+        },
+    };
+});
+
+// Mocking the Users model
+jest.mock('../../models/Users.js', () => {
+    return {
+        findOne: jest.fn(),
+        prototype: {
+            save: jest.fn(),
+        },
+    };
+});
+
+import Users from '../../models/Users.js';
+
+describe('POST /register', () => {
+    let server;
+
+    beforeAll(async () => {
+        server = await app.listen(0);
+    });
+
+    afterAll(async () => {
+        await app.close(); // Close Fastify server
+        await mongoose.connection.close(); // Close mocked mongoose connection
+    });
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should register a new user successfully with valid data', async () => {
+        Users.findOne = jest.fn().mockResolvedValue(null);
+
+        Users.prototype.save = jest.fn().mockResolvedValue({
+            _id: 'mocked-user-id',
+            username: 'Testuser',
+            email: 'Testuser@gmail.com',
+            role: 'user',
+        });
+
+        const response = await request(app.server)
+            .post('/auth/register')
+            .send({
+                username: 'Testuser',
+                email: 'Testuser@gmail.com',
+                password: 'Password@123',
+                role: 'user',
+            });
+
+        expect(response.status).toBe(201);
+        expect(response.body.message).toBe('user created successfully');
+        expect(Users.findOne).toHaveBeenCalledWith({ username: 'Testuser' });
+        expect(Users.prototype.save).toHaveBeenCalled();
+    });
+});
+Recap:
+Mocking mongoose.connection.close() to avoid the TypeError: Cannot read properties of undefined (reading 'close').
+Optional: You can use mongodb-memory-server to run tests against an in-memory database.
+This should resolve the TypeError and allow your tests to run smoothly.
+
+Let me know how it goes!
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+
+
+expect(mockSave).toHaveBeenCalledTimes(1);
+expect(mockSave): This checks if the mock save function was called.
+.toHaveBeenCalledTimes(1): This asserts that the save method was called exactly once during the test. This ensures that the save method was triggered as expected when creating the user.
+
+
+
+
+
+
+. const mockSave = jest.fn().mockResolvedValue({});
+jest.fn():
+
+What it does: This creates a mock (fake) function that you can use in place of a real function.
+Why it's used: Instead of actually calling a function that performs real work (like saving data to a database), you use jest.fn() to create a fake version of that function, so you can control how it behaves during the test.
+.mockResolvedValue({}):
+
+What it does: This tells the fake function (the one we created with jest.fn()) to return a resolved promise with an empty object ({}) when it's called.
+Why it's used: Since saving a user to a database typically involves asynchronous code (i.e., a promise), this mimics the behavior of the real save function but without actually doing anything with a database. By returning an empty object, we simulate that the user has been successfully saved.
+2. Users.prototype.save = mockSave;
+What it does: This line changes the save function on the Users model. The real save method, which normally would save a user to the database, is replaced with the mock version (mockSave).
+Why it's used:
+This avoids actually interacting with the database during the test. The goal is to test the logic of the user registration process without the need to connect to an actual database.
+Instead of saving data to the real database, we use the mock function to simulate that the saving was successful.
+In simple terms:
+Purpose: The whole idea is to test the user registration process without touching a real database.
+The mock function simulates saving a user (i.e., it pretends to save the user successfully).
+This makes the test faster and isolated, because it doesn't depend on a real database or any external system.
+Why it’s useful:
+No side effects: We don’t have to worry about modifying actual data in the database during testing.
+Faster tests: Mocking the database interaction makes tests run quickly because we don't have to wait for the database operations to complete.
+Control: We can control what the mock does (e.g., return a successful result or simulate an error) to test different scenarios.
+So, to summarize, mockSave is just a fake function that helps us simulate the behavior of saving a user to a database without actually doing it, and this keeps our tests isolated and efficient.
+
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+Let me clarify the flow, especially regarding how the mock function is used and how the object (even if it's empty) simulates the behavior of saving in the Users model.
+
+1. What Happens When mockSave Is Called?
+const mockSave = jest.fn().mockResolvedValue({}); creates a mock function called mockSave.
+This mock function is designed to behave like the real save method from the Users model, but instead of performing the actual database operation, it pretends to save the user data and just returns a resolved promise.
+The .mockResolvedValue({}) part tells the mock function that when it is called, it should return a resolved promise with an empty object ({}).
+
+
+2. What Does the Empty Object {} Mean?
+
+The empty object {} is simply a placeholder response. It doesn't mean that no data is saved—it’s just what the test expects as a mock return value.
+
+In the context of this test, the empty object {} is used as a success indicator.
+
+ In reality, the save method would likely return an object containing information about the saved record, such as the user's data and an ID that the database generated.
+
+ But since this is a mock, we simulate the success by returning {}.
+
+3. Why Use an Empty Object {}?
+The empty object here serves two purposes:
+Simulating success: Returning {} means that the "save" operation has been completed successfully. It is commonly used in testing when we don't care about the exact response, just that the operation succeeded.
+
+Control over the test: By using {}, the test is not concerned with the actual data being saved. It's more about confirming that the logic of calling save() works correctly and that the code responds with a successful result.
+
+
+4. How Does This Fit into the Users Model?
+In the real world, when you call Users.save(), it typically saves data (like a new user) to a database and returns an object with details about the user, such as their username, email, password, and possibly a unique id.
+In the mock version, you don’t interact with a real database. Instead, mockSave is used to simulate that process. Since the test doesn’t need the actual data that would be saved, it simply returns {} (an empty object) to indicate the "successful save."
+
+
+5. What Happens in the Test with mockSave?
+In the test, the real save method is replaced with mockSave, so when the user registration route (POST /auth/register) calls save(), it doesn't actually perform any database operation. Instead, it runs the mock function.
+Since .mockResolvedValue({}) is used, the mock function behaves like the real save method but without touching the database. The mock simply resolves with {}, which means the user was successfully created in the mock world.
+
+
+6. Why This is Important in the Test:
+The purpose of using mocks is to isolate the test from real-world side effects (like modifying the database). The test is not concerned with checking if the user is actually saved in a database—it just needs to verify that:
+The registration endpoint returns a 201 status (indicating that the user was created successfully).
+The system behaves as expected (calling save() once).
+So, in summary:
+
+mockSave simulates the behavior of the real save method, without interacting with a database.
+The empty object {} is just a placeholder that tells the test "the user was saved successfully," even though no actual database operation happens.
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+
+What is Users.prototype?
+prototype is a special property in JavaScript that allows you to add methods or properties to a constructor function (in this case, Users). All instances of Users will inherit these methods and properties.
+When you say Users.prototype.save, you’re accessing the save method on the prototype of the Users constructor. This means you’re referring to the method that every instance of Users will use.
+In your case, Users.prototype.save = mockSave; is used to replace the save method on the Users model with the mocked version (mockSave). This is a way to mock out an instance method on the Users model.
+
+Why Users.prototype.save?
+Why it's used: By modifying Users.prototype.save, you're telling Jest that whenever the save method is called on an instance of Users, it should run the mocked version (mockSave) instead of the actual database-saving logic.
+Example of what’s happening: Normally, the save method would save data to a database, but with this mock, no actual database interaction happens, making the test isolated and fast.
+Can We Use Something Other Than prototype?
+Yes, you can use other approaches to mock methods, but using prototype is a common and effective method in this case. Let’s look at other options:
+
+Alternative 1: Mocking the Method Directly
+Instead of modifying the prototype, you can directly mock the method if you're using a class-based structure. For example, if Users is a class, you could mock the method on the class itself:
+
+javascript
+Copy
+Users.save = jest.fn().mockResolvedValue({});
+Here, you're directly replacing the save method of the Users class (not the prototype) with your mock.
+This approach works if you're dealing with a class rather than a function-based constructor (like the Users model you're using).
+Alternative 2: Using Jest Spies
+If you only need to observe how a method is called (without completely replacing it), you can use Jest spies to spy on the existing method and track its calls:
+
+javascript
+Copy
+jest.spyOn(Users.prototype, 'save').mockResolvedValue({});
+jest.spyOn() allows you to "spy" on an existing method (in this case, save). It still allows the original method to run, but you can mock its return value.
+This way, you don't fully replace the method but still control its behavior during the test.
+Alternative 3: Mocking Instance Methods Using Mocks
+If Users is a constructor function and not a class, you can mock the instance methods when you create a mock instance:
+
+javascript
+Copy
+const mockUser = {
+  save: jest.fn().mockResolvedValue({})
+};
+
+Users.mockImplementation(() => mockUser);
+mockImplementation allows you to mock the entire behavior of the Users model.
+When an instance of Users is created, it returns a mock object (mockUser), and when save() is called on it, it will behave as you specified in the mock.
+Summary of Different Options:
+Using prototype (Users.prototype.save = mockSave;) is effective when you're working with a constructor function and you want to modify an instance method.
+Directly mocking the method (Users.save = jest.fn();) works well with class-based structures where you directly modify the method on the class.
+Spying on the method (jest.spyOn(Users.prototype, 'save')) allows you to track calls to a real method while still controlling its return value.
+Mocking instances (Users.mockImplementation()) is useful when you need to mock specific behaviors on instances of Users.
+So yes, while Users.prototype.save is a very common and effective approach for mocking instance methods, other options like jest.spyOn or mocking at the class level are also valid, depending on your use case!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================================================>======================================================================>vv======================================================================>======================================================================>======================================================================>
+Let's break down the issue and analyze why the test might be failing, especially in the part where the bcrypt.compare mock is involved.
+
+What’s Happening in the Test?
+Users.findOne.mockResolvedValue({ ... }):
+
+The Users.findOne function is mocked to simulate finding a user in the database. It's returning a mock user object with:
+_id, username, password (the hashed password), and role.
+The Users.findOne method typically checks the database for a user by a specific criterion (like username), and since it's mocked, we don't need an actual database connection. The test simulates finding a user with username = "username".
+bcrypt.compare = jest.fn().mockResolvedValue(false);:
+
+The bcrypt.compare function is the part responsible for comparing the password entered by the user ("pass1Q@1Aword") with the hashed password stored in the database ('hashedpassword').
+Mocking bcrypt.compare: You're telling Jest that whenever bcrypt.compare is called in the test, it should resolve to false. This means that the passwords don't match, and the login should fail.
+The mock is set up to return false, meaning the password comparison will always fail during this test (and thus, the login should not be successful).
+Test Simulation:
+
+The request is made with bodydata containing:
+username: "username", which should match the mocked username in the database.
+password: "pass1Q@1Aword", which should not match the hashed password 'hashedpassword' because bcrypt.compare returns false.
+The expected outcome is that the login should fail due to incorrect credentials, which should result in a 400 status code and a response body with { error: 'invalid credentials' }.
+Why is the bcrypt.compare Failing?
+The most likely cause of the test failure is that the bcrypt.compare method is not properly mocked or intercepted. Let's investigate potential issues.
+
+Common Issues:
+Incorrect bcrypt Mocking:
+
+If you aren't properly mocking the bcrypt.compare function or it’s not replaced correctly, the original bcrypt.compare method might still be called. The original bcrypt.compare performs real password comparison, which could either always return true or cause an error, causing the test to fail.
+Solution: Ensure that bcrypt.compare is properly mocked in your test setup and is not calling the real method.
+
+The correct approach is to mock the method before the test is executed, either in the test or globally in a beforeAll block or test setup.
+Scope of Mocking:
+
+The test relies on mocking the bcrypt.compare function to ensure it returns false, but sometimes mocks can get reset or not be applied properly if there are any issues with the test setup.
+Solution: Double-check that bcrypt.compare is mocked at the correct scope and that no other code is interfering with the mock.
+
+Mocking bcrypt.compare After Import:
+
+If the bcrypt library is imported before the mocking code runs, Jest will not be able to replace the real bcrypt.compare method with the mock. This is because Jest will cache the module, so when you try to mock it, the bcrypt module may have already been imported and cached.
+Solution: You should mock the bcrypt.compare method before importing it in the test. Or, use jest.mock to mock the module at the beginning of the file or within a beforeAll block to ensure the mock is set up before any code in the test runs.
+
+Here's an example of how to properly mock bcrypt:
+
+javascript
+Copy
+jest.mock('bcrypt', () => ({
+    compare: jest.fn().mockResolvedValue(false)
+}));
+This will ensure that whenever bcrypt.compare is called in the test, it will always return false.
+
+Returning Incorrect Status Code or Error:
+
+If the bcrypt.compare mock is correctly set up but the login route handler is not behaving as expected, you might not be hitting the code path that returns a 400 status code.
+Solution: Review the logic of your login endpoint to ensure that if the password comparison fails (bcrypt.compare returns false), the system responds with a 400 status code and the expected error message ('invalid credentials').
+
+Additional Debugging:
+Check If bcrypt.compare is Called:
+
+You can add an additional check to see if bcrypt.compare is actually being called and whether it's returning the expected value:
+javascript
+Copy
+expect(bcrypt.compare).toHaveBeenCalledWith('pass1Q@1Aword', 'hashedpassword');
+This will verify that bcrypt.compare is being called with the correct parameters.
+
+Ensure Proper app.inject Behavior:
+
+The app.inject() method sends the request to the server, but if the mock of bcrypt.compare is not correctly set up, the response might not be as expected. Ensure that your request payload is valid and that your endpoint is correctly handling it.
+Full Working Example:
+Here’s how your test setup might look after addressing the issues:
+
+javascript
+Copy
+jest.mock('bcrypt', () => ({
+    compare: jest.fn().mockResolvedValue(false)
+}));
+
+describe("testing the login functionality", () => {
+    test('should respond with a status code of 400 for invalid credentials', async () => {
+        // Mocking the user lookup
+        Users.findOne.mockResolvedValue({
+            _id: '1',
+            username: 'username',
+            password: 'hashedpassword',  // Stored hashed password
+            role: 'user'
+        });
+
+        const bodydata = { username: "username", password: "pass1Q@1Aword" };
+        const response = await app.inject({
+            method: 'POST',
+            url: '/auth/login',
+            payload: bodydata
+        });
+
+        // Check if the response is correct
+        expect(response.statusCode).toBe(400);
+        expect(response.headers['content-type']).toEqual(expect.stringContaining('application/json'));
+        expect(JSON.parse(response.body)).toEqual({
+            error: 'invalid credentials'
+        });
+
+        // Check if bcrypt.compare was called with correct parameters
+        expect(bcrypt.compare).toHaveBeenCalledWith('pass1Q@1Aword', 'hashedpassword');
+    });
+});
+Conclusion:
+Ensure that bcrypt.compare is mocked correctly and before the test runs.
+Verify that the test checks for correct status code (400) and response body ({ error: 'invalid credentials' }).
+Use jest.mock properly to mock bcrypt and make sure no real password comparison is happening during the test.
+
+..........................................>
+
+const mockSave={
+UserId: 'user123',
+            logintime: new Date(),
+            logouttime: null,
+            UserToken: 'mockedToken.mockedToken.mockedToken',
+}
+
+
+Logs.prototype.save=jest.fn().MockResolvedValue(true)
+
+\
+and 
+
+ mockUserLog = {
+            _id: 'log123',
+            UserId: 'user123',
+            logintime: new Date(),
+            logouttime: null,
+            UserToken: 'mockedToken.mockedToken.mockedToken',
+            save: jest.fn().mockResolvedValue(true) };
+
+ Logs.findOne.mockResolvedValue(mockUserLog);
+
+works here in same way:
+
