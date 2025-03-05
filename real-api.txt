@@ -1,5 +1,34 @@
 
 
+OR conditional query parameter :
+let orConditions = [];
+
+    for (let key in query) {
+        if (key === "eventname") {
+            const eventNames = query[key].split(",");
+            orConditions.push({ [key]: { $in: eventNames } });
+        } else if (key === "amountrange") {
+            const maxAmount = Number(query[key]);
+            orConditions.push({ [key]: { $gte: 0, $lte: maxAmount } });
+        } else if (key === "eventlocation") {
+            const eventLocations = query[key].split(",");
+            orConditions.push({ [key]: { $in: eventLocations } });
+        } else {
+            orConditions.push({ [key]: query[key] });
+        }
+    }
+
+    try {
+        let queryObject = orConditions.length > 0 ? { $or: orConditions } : {};
+
+        console.log(queryObject, "updated before going to the database");
+        const result = await Event.find(queryObject);
+
+====================================================================================================>
+
+
+
+
 qqqqqq
 tokens:
 https://github.com/shaikahmadnawaz/access-refresh-tokens-nodejs
