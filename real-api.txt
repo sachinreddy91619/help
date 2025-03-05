@@ -1,3 +1,334 @@
+
+
+MONGO DB VERSIONING :
+ What is __v in Mongoose?
+The __v field is used by Mongoose for versioning.
+It is mainly used to track document versions when using Mongoose's "Optimistic Concurrency Control".
+The default value is 0, and it increments whenever the document is updated if versioning is enabled.
+
+If you don’t need __v, you can remove it in 3 ways:
+const event = await Event.find(queryObject).select('-__v');
+...> This will exclude the __v field from the response.
+
+Method 2: Use Schema Option (versionKey: false)
+If you don’t want Mongoose to create the __v field at all, set versionKey: false in your schema:
+
+const eventSchema = new mongoose.Schema({
+    eventname: String,
+    eventdate: String,
+    eventlocation: String,
+    amountrange: Number
+}, { versionKey: false });  // 🔹 Disables `__v`
+
+This ensures that __v is never added to any document.
+
+Method 3: Use .toJSON() or .toObject() Hooks
+You can modify the JSON output of the model:
+eventSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        delete ret.__v;
+        return ret;
+    }
+});
+
+Usage of __v in Mongoose (Optimistic Concurrency Control)
+The __v field in Mongoose is primarily used for Optimistic Concurrency Control (OCC). This helps prevent conflicts when multiple users try to update the same document simultaneously.
+
+What is Optimistic Concurrency Control?
+Optimistic Concurrency Control (OCC) is a method used to handle simultaneous updates to a document in a multi-user environment.
+
+Instead of locking a document (as in pessimistic locking), OCC assumes that conflicts are rare.
+If a conflict is detected (i.e., another update has already changed the document), the update fails.
+The user must then re-fetch the latest document and try the update again.
+
+
+How __v Works in Mongoose?
+Mongoose automatically adds __v: 0 when a document is created.
+When the document is updated, Mongoose increments __v by 1.
+If two updates happen simultaneously, Mongoose detects version mismatch and throws an error.
+
+
+Initial Document in MongoDB
+{
+    "_id": "65f4b2c8e9f3c20017045a2d",
+    "eventname": "Tech Conference 2025",
+    "eventlocation": "Hyderabad",
+    "amountrange": 1500,
+    "__v": 0
+}
+Here, __v: 0 means it's the first version of this document.
+
+ Two Users Fetch the Same Document
+User A and User B fetch the event document at the same time.
+Both users receive __v: 0 in their response.
+
+
+
+User A Updates the Document
+await Event.findByIdAndUpdate(
+    "65f4b2c8e9f3c20017045a2d",
+    { eventlocation: "Bangalore" },
+    { new: true }
+);
+
+
+Mongoose increments __v to 1.
+The updated document in MongoDB:
+{
+    "_id": "65f4b2c8e9f3c20017045a2d",
+    "eventname": "Tech Conference 2025",
+    "eventlocation": "Bangalore",
+    "amountrange": 1500,
+    "__v": 1
+}
+
+User B Tries to Update the Old Version
+User B still has __v: 0 in their local data.
+
+If they try to update the event:
+
+await Event.findByIdAndUpdate(
+    "65f4b2c8e9f3c20017045a2d",
+    { amountrange: 2000 },
+    { new: true }
+);
+
+Mongoose detects a version mismatch and throws an error, preventing the update.
+
+VersionError: No matching document found for id "65f4b2c8e9f3c20017045a2d" version 0
+
+ How to Enable OCC in Mongoose?
+By default, __v is enabled, but you need to use optimisticConcurrency: true to make Mongoose check for version mismatches.
+
+
+const eventSchema = new mongoose.Schema({
+    eventname: String,
+    eventlocation: String,
+    amountrange: Number
+}, { optimisticConcurrency: true });  // 🔹 Enables OCC
+
+
+With optimisticConcurrency: true, if two users update the same document, Mongoose will prevent conflicts by checking __v.
+
+
+
+
+=====================================================================================================================>
+
+COMPLETE REFE FOR TEH PATH AND QUERY DOCUMENTATION :
+GET /events/:eventId?eventname=Tech%20Conference&eventlocation=Hyderabad&amountrange=1500
+schema: {
+        tags: ["Events"],
+        summary: "Get event details using event ID and optional filters",
+        description: "Fetches an event by event ID and allows optional filtering through query parameters.",
+        
+        // Path Parameters
+        params: {
+            type: "object",
+            properties: {
+                eventId: {
+                    type: "string",
+                    description: "Unique event ID",
+                    example: "60f7b2c8e9f3c20017045a2d"
+                }
+            },
+            required: ["eventId"]
+        },
+
+        // Query Parameters
+        querystring: {
+            type: "object",
+            properties: {
+                eventname: {
+                    type: "string",
+                    description: "Event name filter (optional)",
+                    example: "Tech Conference 2025"
+                },
+                eventlocation: {
+                    type: "string",
+                    description: "Event location filter (optional)",
+                    example: "Hyderabad"
+                },
+                amountrange: {
+                    type: "number",
+                    description: "Maximum amount range filter (optional)",
+                    example: 1500
+                }
+            }
+        },
+
+
+fastify.get('/events/:eventId', getEventDetails, async (request, reply) => {
+    const { eventId } = request.params;
+    const { eventname, eventlocation, amountrange } = request.query;
+
+    let queryObject = { _id: eventId };
+
+    if (eventname) queryObject.eventname = eventname;
+    if (eventlocation) queryObject.eventlocation = eventlocation;
+    if (amountrange) queryObject.amountrange = { $lte: Number(amountrange) };
+
+    try {
+        const event = await Event.find(queryObject);
+
+
+===============================================================================================
+SWAGGER API for the path parameters:
+export const getEventByIdAndLocation = {
+    schema: {
+        tags: ["Events"],
+        summary: "Get event details by event ID and location",
+        description: "Fetches event details using the event ID and location.",
+        params: {
+            type: "object",
+            properties: {
+                eventId: {
+                    type: "string",
+                    description: "Unique event ID",
+                    example: "60f7b2c8e9f3c20017045a2d"
+                },
+                eventLocation: {
+                    type: "string",
+                    description: "Event location (city name)",
+                    example: "Hyderabad"
+                }
+            },
+            required: ["eventId", "eventLocation"]
+        },
+        response: {
+            200: {
+                description: "Event details retrieved successfully",
+                type: "object",
+                properties: {
+                    eventname: { type: "string", example: "Tech Conference 2025" },
+                    eventdate: { type: "string", example: "2025-07-15" },
+                    eventlocation: { type: "string", example: "Hyderabad" },
+                    amountrange: { type: "number", example: 1500 },
+                    eventtime: { type: "string", example: "18:30:00" },
+                    totalseats: { type: "integer", example: 200 },
+                    availableseats: { type: "integer", example: 180 },
+                    bookedseats: { type: "integer", example: 20 },
+                    userId: { type: "string", example: "60f7b2c8e9f3c20017045a2d" }
+                }
+            },
+            404: {
+                description: "Event not found",
+                type: "object",
+                properties: {
+                    error: { type: "string", example: "Event not found with the given ID and location" }
+                }
+            },
+            500: {
+                description: "Server error",
+                type: "object",
+                properties: {
+                    error: { type: "string", example: "Internal server error" }
+                }
+            }
+        }
+    }
+};
+
+
+======================================================================================
+SYMBOLS USED IN THE QUERY AND PATH PARAMETERS:
+
+Query Parameters (?key=value&key2=value2)
+Special characters must be URL-encoded (encodeURIComponent).
+Spaces are converted to %20 or +.
+Some symbols can be used directly, but others need encoding.
+
+Symbol	Encoded Version	Example
+Space	%20 or +	?search=Tech%20Conference
+Comma ,	%2C	?categories=AI%2CML%2CCloud
+Slash /	%2F	?path=folder%2Fsubfolder
+Colon :	%3A	?time=10%3A30%20AM
+Ampersand &	%26	?title=Rock%20%26%20Roll
+Question Mark ?	%3F	?message=What%3F%20No%20way!
+Equal =	%3D	?query=name%3DJohn
+Hash #	%23	?section=Chapter%23Five
+Plus +	%2B	?math=2%2B2%3D4
+Percent %	%25	?discount=50%25
+At @	%40	?email=user%40example.com
+
+🔹 Example Query Parameter Usage
+
+
+GET /search?name=John%20Doe&category=AI%2CML&price=100%2B
+➡️ Searches for "John Doe" in categories AI & ML with a price including +.
+
+2️⃣ Path Parameters (/events/:id/:name)
+Slashes / are not allowed inside path parameters (used for separating routes).
+Symbols must be encoded when used inside paths.
+Use hyphens - and underscores _ safely.
+
+Symbol	Allowed?	Encoded Version	Example
+Hyphen -	✅ Yes	No encoding	/events/tech-conference
+Underscore _	✅ Yes	No encoding	/user/john_doe
+Space	❌ No	%20	/events/Tech%20Conference
+Slash /	❌ No	%2F (not allowed in paths)	(Cannot use)
+Comma ,	✅ Yes	%2C	/categories/AI%2CML
+Colon :	❌ No	%3A	(Avoid in paths)
+Ampersand &	❌ No	%26	(Avoid in paths)
+Equal =	❌ No	%3D	(Avoid in paths)
+Hash #	❌ No	%23	(Avoid in paths)
+Question Mark ?	❌ No	%3F	(Avoid in paths)
+
+🔹 Example Path Parameter Usage
+
+
+GET /events/tech-conference-2025/hyderabad
+➡️ Fetches details for "Tech Conference 2025" in "Hyderabad".
+
+3️⃣ Mixed Path + Query Parameters
+You can combine path parameters and query parameters.
+
+
+GET /events/tech-conference-2025?location=Hyderabad&price=1000
+➡️ Fetches "Tech Conference 2025" in Hyderabad with price 1000.
+
+
+==================================================================================
+
+fastify.get('/events/:eventname/:eventlocation/:amountrange?', demo);
+
+:eventname → Mandatory path parameter
+:eventlocation → Mandatory path parameter
+:amountrange? → Optional path parameter (denoted by ?)
+
+export const demo = async (request, reply) => {
+    let params = request.params;
+    console.log(params);
+
+    let queryObject = {};
+
+    for (let key in params) {
+        if (key === 'eventname') {
+            const eventNames = params[key].split(',');
+            queryObject[key] = { $in: eventNames };
+        } else if (key === 'amountrange') {
+            const maxAmount = Number(params[key]);
+            queryObject[key] = { $gte: 0, $lte: maxAmount };
+        } else if (key === 'eventlocation') {
+            const eventLocations = params[key].split(',');
+            queryObject[key] = { $in: eventLocations };
+        } else {
+            queryObject[key] = params[key];
+        }
+    }
+
+    try {
+        console.log(queryObject, "Updated before querying the database");
+        const result = await Event.find(queryObject);
+        reply.status(200).send(result);
+    } catch (err) {
+        return reply.status(500).send({ error: "Server error for the demo route" });
+    }
+};
+
+
+================================================>
+
 sanitization of the number :
 
 import validator from 'validator';
