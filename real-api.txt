@@ -1,5 +1,25 @@
+sanitization of the number :
 
+import validator from 'validator';
 
+const sanitizeNumber = (num) => {
+    if (validator.isNumeric(num, { no_symbols: true })) {
+        return Number(validator.trim(num)); // Convert to a number after trimming
+    } else {
+        throw new Error("Invalid number input");
+    }
+};
+
+// Example usage:
+try {
+    const userInput = " 12345 ";  // Example with spaces
+    const sanitizedNum = sanitizeNumber(userInput);
+    console.log("Sanitized Number:", sanitizedNum);
+} catch (error) {
+    console.error(error.message);
+}
+
+===========================================
 OR conditional query parameter :
 let orConditions = [];
 
