@@ -237,7 +237,115 @@ Resolve conflicts (if any): If there are conflicts, Git will notify you, and you
 .> git commit -m "Resolved conflicts and synced with remote"
 
 ======================================================================================================================================================================================================================================================================================================================================================
+Compare the performance (response time and throughput) of two APIs:
 
+Express API: http://localhost:3000/api
+Fastify API: http://localhost:4000/api
+🎯 Step 1: Install and Launch JMeter
+1.1 Download JMeter:
+Go to JMeter Download Page.
+Download the .zip or .tgz version for your operating system.
+1.2 Extract JMeter:
+Extract the downloaded file into your preferred directory.
+1.3 Launch JMeter:
+Navigate to the bin folder in the extracted directory.
+
+For Windows:
+
+bash
+Copy code
+jmeter.bat
+For Mac/Linux:
+bash
+Copy code
+./jmeter
+🚀 Step 2: Run Express and Fastify APIs
+2.1 Run Express API:
+Open your terminal and navigate to the Express API directory.
+bash
+Copy code
+cd /path/to/express-api
+Start the Express server:
+bash
+Copy code
+node app.js
+Confirm it’s running at:
+bash
+Copy code
+http://localhost:3000/api
+2.2 Run Fastify API:
+Open another terminal and navigate to the Fastify API directory.
+bash
+Copy code
+cd /path/to/fastify-api
+Start the Fastify server:
+bash
+Copy code
+node app.js
+Confirm it’s running at:
+bash
+Copy code
+http://localhost:4000/api
+📝 Step 3: Create JMeter Test Plan
+3.1 Open JMeter:
+Double-click on jmeter.bat or jmeter to open the JMeter UI.
+3.2 Add a Test Plan:
+Right-click on Test Plan → Click Add → Select Threads (Users) → Thread Group.
+3.3 Configure Thread Group:
+Click on Thread Group.
+Set the following values:
+Number of Threads (users): 100 (Simulate 100 concurrent users)
+Ramp-up Period (in seconds): 5 (How quickly users ramp up)
+Loop Count: 10 (Number of times to repeat the test)
+Click OK.
+🌐 Step 4: Add HTTP Requests
+4.1 Add HTTP Request for Express API:
+Right-click on Thread Group → Click Add → Select Sampler → HTTP Request.
+Configure the HTTP Request:
+Server Name or IP: localhost
+Port Number: 3000
+Path: /api
+Method: GET (or as needed for your API)
+Click OK.
+4.2 Add HTTP Request for Fastify API:
+Right-click on Thread Group → Click Add → Select Sampler → HTTP Request.
+Configure the HTTP Request:
+Server Name or IP: localhost
+Port Number: 4000
+Path: /api
+Method: GET (or as needed for your API)
+Click OK.
+📊 Step 5: Add Listeners to Monitor Results
+5.1 Add Summary Report:
+Right-click on Thread Group → Click Add → Select Listener → Summary Report.
+5.2 Optional Listeners (for more analysis):
+Add View Results in Table:
+Right-click on Thread Group → Add → Listener → View Results in Table.
+Add Graph Results:
+Right-click on Thread Group → Add → Listener → Graph Results.
+🛠️ Step 6: Configure and Save Test Plan
+6.1 Save Test Plan:
+Click File → Save As.
+Save the file as api-test-plan.jmx in a desired location.
+▶️ Step 7: Run the Test
+7.1 Start the Test:
+Click the Start button (green play icon) in the top toolbar.
+Wait for the test to complete.
+7.2 Monitor Progress:
+View the results in the Summary Report and other listeners.
+📈 Step 8: Analyze Results
+8.1 Compare the Key Metrics:
+Average Response Time: Lower is better.
+Throughput: Higher is better.
+Error Rate: Should be 0% or as low as possible.
+8.2 Interpret Results:
+Check which API (Express or Fastify) performs better under load.
+Fastify usually has:
+Lower latency
+Higher throughput compared to Express.
+📦 Step 9: Export Results (Optional)
+Right-click on Summary Report → Save Table Data.
+Save results as .csv for further analysis.
 
 
 
